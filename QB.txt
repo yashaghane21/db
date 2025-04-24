@@ -1,213 +1,439 @@
 -- #############################################
 -- Q1 – DDL (Students → StudentData)
--- #############################################
-
+-- (a) Create a table called Students with ID, Name, and Age.
 CREATE TABLE Students (ID INT, Name VARCHAR(100), Age INT);
+
+-- (b) Add a column Class to the Students table.
 ALTER TABLE Students ADD Class VARCHAR(50);
+
+-- (c) Rename the Students table to StudentData.
 ALTER TABLE Students RENAME TO StudentData;
+
+-- (d) Delete the Age column from StudentData.
 ALTER TABLE StudentData DROP COLUMN Age;
+
+
 
 -- #############################################
 -- Q2 – DDL (Courses)
--- #############################################
-
+-- (a) Create a table named Courses with CourseID and CourseName.
 CREATE TABLE Courses (CourseID INT, CourseName VARCHAR(100));
+
+-- (b) Add a column Duration to the Courses table.
 ALTER TABLE Courses ADD Duration VARCHAR(50);
+
+-- (c) Set the CourseID column as the primary key.
 ALTER TABLE Courses ADD PRIMARY KEY (CourseID);
+
+-- (d) Drop the Courses table.
 DROP TABLE Courses;
+
+
 
 -- #############################################
 -- Q3 – DDL (Results)
--- #############################################
-
+-- (a) Create a table Results with StudentID, Subject, and Marks.
 CREATE TABLE Results (StudentID INT, Subject VARCHAR(100), Marks INT);
+
+-- (b) Add a column Grade to the Results table.
 ALTER TABLE Results ADD Grade CHAR(2);
+
+-- (c) Make the Marks column NOT NULL.
 ALTER TABLE Results MODIFY Marks INT NOT NULL;
+
+-- (d) Drop the Grade column.
 ALTER TABLE Results DROP COLUMN Grade;
+
+
 
 -- #############################################
 -- Q4 – DDL (Teachers)
--- #############################################
-
+-- (a) Create a table Teachers with TeacherID, Name, and Subject.
 CREATE TABLE Teachers (TeacherID INT, Name VARCHAR(100), Subject VARCHAR(100));
+
+-- (b) Add a column Email to the Teachers table.
 ALTER TABLE Teachers ADD Email VARCHAR(100);
+
+-- (c) Set TeacherID as the primary key.
 ALTER TABLE Teachers ADD PRIMARY KEY (TeacherID);
+
+-- (d) Drop the Teachers table.
 DROP TABLE Teachers;
+
+
 
 -- #############################################
 -- Q5 – DDL (Library)
--- #############################################
-
+-- (a) Create a table Library with BookID, BookName, and IssuedTo.
 CREATE TABLE Library (BookID INT, BookName VARCHAR(200), IssuedTo VARCHAR(100));
+
+-- (b) Add a column IssuedDate to Library.
 ALTER TABLE Library ADD IssuedDate DATE;
+
+-- (c) Rename column IssuedTo to StudentID.
 ALTER TABLE Library RENAME COLUMN IssuedTo TO StudentID;
+
+-- (d) Delete the column IssuedDate.
 ALTER TABLE Library DROP COLUMN IssuedDate;
+
+
 
 -- #############################################
 -- Q6 – DML (StudentData & Courses)
--- #############################################
-
+-- (a) Insert a new student into StudentData.
 INSERT INTO StudentData (ID, Name, Class) VALUES (1, 'Alice', '4th');
-INSERT INTO Courses (CourseID, CourseName, Duration) VALUES (101, 'Maths', '3 months'), (102, 'History', '4 months');
+
+-- (b) Insert 2 rows into Courses.
+INSERT INTO Courses (CourseID, CourseName, Duration)
+VALUES (101, 'Maths', '3 months'),
+       (102, 'History', '4 months');
+
+-- (c) Update the Class of student with ID 1 to "5th".
 UPDATE StudentData SET Class = '5th' WHERE ID = 1;
+
+-- (d) Delete the student with ID 2.
 DELETE FROM StudentData WHERE ID = 2;
+
+
 
 -- #############################################
 -- Q7 – DML (Courses, StudentData, Results)
--- #############################################
-
+-- (a) Insert a course named "Maths".
 INSERT INTO Courses (CourseID, CourseName) VALUES (103, 'Maths');
+
+-- (b) Update the Duration of all courses to 6 months.
 UPDATE Courses SET Duration = '6 months';
+
+-- (c) Delete all students older than 12 years.
 DELETE FROM StudentData WHERE Age > 12;
+
+-- (d) Insert a new result for a student.
 INSERT INTO Results (StudentID, Subject, Marks) VALUES (1, 'Science', 75);
+
+
 
 -- #############################################
 -- Q8 – DML (Teachers & Library)
--- #############################################
+-- (a) Insert a teacher into Teachers table.
+INSERT INTO Teachers (TeacherID, Name, Subject, Email)
+VALUES (1, 'Ravi', 'Math', 'ravi@example.com');
 
-INSERT INTO Teachers (TeacherID, Name, Subject, Email) VALUES (1, 'Ravi', 'Math', 'ravi@example.com');
+-- (b) Change the Subject of a teacher to "Science".
 UPDATE Teachers SET Subject = 'Science' WHERE TeacherID = 1;
+
+-- (c) Delete the teacher named "Ravi".
 DELETE FROM Teachers WHERE Name = 'Ravi';
-INSERT INTO Library (BookID, BookName, StudentID) VALUES (1, 'Physics 101', NULL), (2, 'Chemistry Basics', 1), (3, 'Biology Intro', NULL);
+
+-- (d) Insert multiple books into Library.
+INSERT INTO Library (BookID, BookName, StudentID)
+VALUES (1, 'Physics 101', NULL),
+       (2, 'Chemistry Basics', 1),
+       (3, 'Biology Intro', NULL);
+
+
 
 -- #############################################
 -- Q9 – DML (Results & StudentData)
--- #############################################
-
+-- (a) Add a mark entry in Results for StudentID 1.
 INSERT INTO Results (StudentID, Subject, Marks) VALUES (1, 'Maths', 85);
+
+-- (b) Change the Marks of StudentID 1 to 90.
 UPDATE Results SET Marks = 90 WHERE StudentID = 1;
+
+-- (c) Delete result entries with Marks less than 40.
 DELETE FROM Results WHERE Marks < 40;
+
+-- (d) Insert a new student record with all details.
 INSERT INTO StudentData (ID, Name, Class) VALUES (2, 'Bob', '5th');
+
+
 
 -- #############################################
 -- Q10 – DML (Library & Courses)
--- #############################################
-
+-- (a) Insert a book record in the Library table.
 INSERT INTO Library (BookID, BookName, StudentID) VALUES (4, 'World History', NULL);
+
+-- (b) Change the BookName of BookID 2 to "English Grammar".
 UPDATE Library SET BookName = 'English Grammar' WHERE BookID = 2;
+
+-- (c) Delete all books that are not issued.
 DELETE FROM Library WHERE StudentID IS NULL;
+
+-- (d) Insert a course with ID 101 and name "History".
 INSERT INTO Courses (CourseID, CourseName) VALUES (101, 'History');
+
+
 
 -- #############################################
 -- Q11 – Views
--- #############################################
+-- (a) Create a view StudentInfo that shows Name, Class, and Marks from the Students table.
+CREATE VIEW StudentInfo AS
+  SELECT s.Name, s.Class, r.Marks
+  FROM StudentData s
+  JOIN Results r ON s.ID = r.StudentID;
 
-CREATE VIEW StudentInfo AS SELECT Name, Class, Marks FROM StudentData s JOIN Results r ON s.ID = r.StudentID;
-CREATE VIEW PassedStudents AS SELECT * FROM StudentInfo WHERE Marks >= 50;
+-- (b) Create a view PassedStudents for students with Marks >= 50.
+CREATE VIEW PassedStudents AS
+  SELECT * FROM StudentInfo WHERE Marks >= 50;
+
+-- (c) Drop the view StudentInfo.
 DROP VIEW StudentInfo;
-UPDATE PassedStudents SET Marks = Marks + 1 WHERE Name = 'Alice';
+
+-- (d) Update a record in the view PassedStudents.
+UPDATE PassedStudents SET Marks = Marks + 5 WHERE Name = 'Alice';
+
+
 
 -- #############################################
 -- Q12 – Views
--- #############################################
+-- (a) Create a view CourseDetails that joins Courses and Teachers to display CourseName and TeacherName.
+CREATE VIEW CourseDetails AS
+  SELECT c.CourseName, t.Name AS TeacherName
+  FROM Courses c
+  JOIN Teachers t ON c.CourseID = t.TeacherID;
 
-CREATE VIEW CourseDetails AS SELECT c.CourseName, t.Name AS TeacherName FROM Courses c JOIN Teachers t ON c.CourseID = t.TeacherID;
-CREATE VIEW TopPerformers AS SELECT s.Name, r.Marks FROM StudentData s JOIN Results r ON s.ID = r.StudentID WHERE r.Marks > 80;
+-- (b) Create a view TopPerformers showing students who have scored more than 80 in Marks.
+CREATE VIEW TopPerformers AS
+  SELECT s.Name, r.Marks
+  FROM StudentData s
+  JOIN Results r ON s.ID = r.StudentID
+  WHERE r.Marks > 80;
+
+-- (c) Select all students from TopPerformers view.
 SELECT * FROM TopPerformers;
+
+-- (d) Drop the TopPerformers view.
 DROP VIEW TopPerformers;
+
+
 
 -- #############################################
 -- Q13 – Views
--- #############################################
+-- (a) Create a view to show the total marks of each student using SUM(Marks).
+CREATE VIEW TotalMarks AS
+  SELECT StudentID, SUM(Marks) AS Total
+  FROM Results
+  GROUP BY StudentID;
 
-CREATE VIEW TotalMarks AS SELECT StudentID, SUM(Marks) AS Total FROM Results GROUP BY StudentID;
-CREATE VIEW StudentCourses AS SELECT s.Name, c.CourseName FROM StudentData s JOIN Courses c ON s.ID = c.CourseID;
-ALTER VIEW CourseDetails AS SELECT c.CourseName, t.Name AS TeacherName, c.Duration FROM Courses c JOIN Teachers t ON c.CourseID = t.TeacherID;
+-- (b) Create a view that displays student names and their corresponding course names.
+CREATE VIEW StudentCourses AS
+  SELECT s.Name, c.CourseName
+  FROM StudentData s
+  JOIN Courses c ON s.ID = c.CourseID;
+
+-- (c) Modify the view CourseDetails to show additional details.
+ALTER VIEW CourseDetails AS
+  SELECT c.CourseName, t.Name AS TeacherName, c.Duration
+  FROM Courses c
+  JOIN Teachers t ON c.CourseID = t.TeacherID;
+
+-- (d) Drop the CourseDetails view.
 DROP VIEW CourseDetails;
+
+
 
 -- #############################################
 -- Q14 – Clauses
--- #############################################
-
+-- (a) Use the IN clause to select students who are in the "Science" or "Arts" department.
 SELECT * FROM StudentData WHERE Department IN ('Science','Arts');
+
+-- (b) Use the DISTINCT clause to list unique courses in the Courses table.
 SELECT DISTINCT CourseName FROM Courses;
-SELECT * FROM Results WHERE Marks > 60 AND (SELECT Age FROM StudentData WHERE ID = Results.StudentID) < 20;
-SELECT * FROM Results WHERE Marks > 50 OR (SELECT Age FROM StudentData WHERE ID = Results.StudentID) < 18;
+
+-- (c) Use the AND clause to select students with Marks > 60 and Age < 20.
+SELECT * FROM Results r
+JOIN StudentData s ON r.StudentID = s.ID
+WHERE r.Marks > 60 AND s.Age < 20;
+
+-- (d) Use the OR clause to select students who have either Marks > 50 or Age < 18.
+SELECT * FROM Results r
+JOIN StudentData s ON r.StudentID = s.ID
+WHERE r.Marks > 50 OR s.Age < 18;
+
+
 
 -- #############################################
 -- Q15 – Clauses
--- #############################################
-
+-- (a) Use the LIMIT clause to select the top 5 students based on marks.
 SELECT * FROM Results ORDER BY Marks DESC LIMIT 5;
+
+-- (b) Use the IS NULL clause to find students without email addresses.
 SELECT * FROM Teachers WHERE Email IS NULL;
+
+-- (c) Use LIKE to find all students whose name contains "John".
 SELECT * FROM StudentData WHERE Name LIKE '%John%';
-SELECT Department, AVG(Marks) FROM Results r JOIN StudentData s ON r.StudentID = s.ID GROUP BY Department;
+
+-- (d) Use GROUP BY to get the average marks of students per department.
+SELECT s.Department, AVG(r.Marks) AS AvgMarks
+FROM Results r
+JOIN StudentData s ON r.StudentID = s.ID
+GROUP BY s.Department;
+
+
 
 -- #############################################
 -- Q16 – Clauses
--- #############################################
-
+-- (a) Write a query to find all students who scored more than 50 marks using the WHERE clause.
 SELECT * FROM Results WHERE Marks > 50;
+
+-- (b) Write a query to display the names of all courses and their corresponding credits, ordered by credits in descending order using the ORDER BY clause.
 SELECT CourseName, Credits FROM Courses ORDER BY Credits DESC;
-SELECT Department, COUNT(*) FROM StudentData GROUP BY Department;
-SELECT DeptID, COUNT(*) FROM Teachers GROUP BY DeptID HAVING COUNT(*) > 10;
+
+-- (c) Write a query to list the total number of students in each department using the GROUP BY clause.
+SELECT Department, COUNT(*) AS NumStudents FROM StudentData GROUP BY Department;
+
+-- (d) Write a query to find departments that have more than 10 teachers using the HAVING clause after grouping by department.
+SELECT DeptID, COUNT(*) AS NumTeachers FROM Teachers GROUP BY DeptID HAVING COUNT(*) > 10;
+
+
 
 -- #############################################
 -- Q17 – Aggregate Functions
--- #############################################
-
+-- (a) Use COUNT() to find the number of students in the Students table.
 SELECT COUNT(*) FROM StudentData;
+
+-- (b) Use AVG() to calculate the average marks in the Results table.
 SELECT AVG(Marks) FROM Results;
+
+-- (c) Use SUM() to get the total marks of all students in a specific course.
 SELECT SUM(Marks) FROM Results WHERE CourseID = 101;
+
+-- (d) Use MAX() to find the highest marks in the Results table.
 SELECT MAX(Marks) FROM Results;
+
+
 
 -- #############################################
 -- Q18 – Aggregate Functions
--- #############################################
+-- (a) Use MIN() to find the student with the lowest marks.
+SELECT * FROM Results ORDER BY Marks ASC LIMIT 1;
 
-SELECT MIN(Marks) FROM Results;
+-- (b) Use COUNT() to find the number of students who have registered for a course.
 SELECT COUNT(DISTINCT StudentID) FROM Results;
+
+-- (c) Use SUM() to calculate the total credits of all courses.
 SELECT SUM(Credits) FROM Courses;
+
+-- (d) Use AVG() to calculate the average credits per course.
 SELECT AVG(Credits) FROM Courses;
+
+
 
 -- #############################################
 -- Q19 – Aggregate Functions
--- #############################################
-
+-- (a) Write a query to find the total number of students in the Students table using the COUNT() function.
 SELECT COUNT(*) FROM StudentData;
+
+-- (b) Write a query to calculate the average marks of all students in the Results table using the AVG() function.
 SELECT AVG(Marks) FROM Results;
+
+-- (c) Write a query to find the total marks obtained by all students in the Results table using the SUM() function.
 SELECT SUM(Marks) FROM Results;
+
+-- (d) Write a query to find the highest marks obtained by any student in the Results table using the MAX() function.
 SELECT MAX(Marks) FROM Results;
+
+
 
 -- #############################################
 -- Q20 – Constraints
--- #############################################
+-- (a) Create a Students table with a primary key on StudentID.
+CREATE TABLE Students2 (
+  StudentID INT PRIMARY KEY,
+  Name      VARCHAR(100) NOT NULL,
+  Email     VARCHAR(100) UNIQUE
+);
 
-CREATE TABLE Students2 (StudentID INT PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email VARCHAR(100) UNIQUE);
-ALTER TABLE Results ADD CONSTRAINT chk_marks CHECK (Marks >= 0);
+-- (b) Add a NOT NULL constraint to the Name column of Students.
+-- (implemented above in CREATE)
+
+-- (c) Add a unique constraint on the Email column.
+-- (implemented above in CREATE)
+
+-- (d) Add a CHECK constraint to ensure Marks >= 0 in Results.
+ALTER TABLE Results ADD CONSTRAINT chk_marks_nonnegative CHECK (Marks >= 0);
+
+
 
 -- #############################################
 -- Q21 – Constraints
--- #############################################
+-- (a) Create a table Faculty with a NOT NULL constraint on Name.
+CREATE TABLE Faculty (
+  FacultyID INT,
+  Name      VARCHAR(100) NOT NULL,
+  DeptID    INT
+);
 
-CREATE TABLE Faculty (FacultyID INT, Name VARCHAR(100) NOT NULL, DeptID INT);
+-- (b) Modify the Results table to add a DEFAULT value of 0 to Marks.
 ALTER TABLE Results ALTER COLUMN Marks SET DEFAULT 0;
+
+-- (c) Add a foreign key from Courses.CourseID to Results.CourseID.
 ALTER TABLE Results ADD FOREIGN KEY (CourseID) REFERENCES Courses(CourseID);
+
+-- (d) Create a check constraint on Age in Teachers to be above 21.
 ALTER TABLE Teachers ADD CONSTRAINT chk_age CHECK (Age > 21);
+
+
 
 -- #############################################
 -- Q22 – Constraints
--- #############################################
-
+-- (a) Create a Departments table with a primary key on DeptID.
 CREATE TABLE Departments (DeptID INT PRIMARY KEY, DeptName VARCHAR(100));
+
+-- (b) Add a foreign key constraint from Faculty.DeptID to Departments.DeptID.
 ALTER TABLE Faculty ADD FOREIGN KEY (DeptID) REFERENCES Departments(DeptID);
+
+-- (c) Add a CHECK constraint to ensure that Marks is between 0 and 100.
 ALTER TABLE Results ADD CONSTRAINT chk_marks_range CHECK (Marks BETWEEN 0 AND 100);
-ALTER TABLE Faculty ALTER COLUMN DeptName SET DEFAULT 'General';
+
+-- (d) Add a DEFAULT constraint to Department in the Faculty table.
+ALTER TABLE Faculty ALTER COLUMN DeptID SET DEFAULT 1;
+
+
 
 -- #############################################
 -- Q23 – Joins
--- #############################################
+-- (a) Write a query to join Students and Courses to display student names with their course names.
+SELECT s.Name, c.CourseName
+FROM StudentData s
+JOIN Courses c ON s.ID = c.CourseID;
 
-SELECT s.Name, c.CourseName FROM StudentData s JOIN Courses c ON s.ID = c.CourseID;
-SELECT s.Name, r.Marks FROM StudentData s INNER JOIN Results r ON s.ID = r.StudentID;
-SELECT s.Name, r.Marks FROM StudentData s LEFT JOIN Results r ON s.ID = r.StudentID;
-SELECT t.Name, d.DeptName FROM Teachers t JOIN Departments d ON t.DeptID = d.DeptID;
+-- (b) Use an INNER JOIN to show students and their results.
+SELECT s.Name, r.Marks
+FROM StudentData s
+INNER JOIN Results r ON s.ID = r.StudentID;
+
+-- (c) Use a LEFT JOIN to show all students with or without results.
+SELECT s.Name, r.Marks
+FROM StudentData s
+LEFT JOIN Results r ON s.ID = r.StudentID;
+
+-- (d) Write a query to join Departments with Teachers and display teacher names with their department names.
+SELECT t.Name, d.DeptName
+FROM Teachers t
+JOIN Departments d ON t.DeptID = d.DeptID;
+
+
 
 -- #############################################
 -- Q24 – Joins
--- #############################################
+-- (a) Write a query to find all students and the courses they are enrolled in using an INNER JOIN.
+SELECT s.Name, c.CourseName
+FROM StudentData s
+INNER JOIN Courses c ON s.ID = c.CourseID;
 
-SELECT s.Name, c.CourseName FROM StudentData s INNER JOIN Courses c ON s.ID = c.CourseID;
-SELECT s.Name, r.Marks FROM StudentData s LEFT JOIN Results r ON s.ID = r.StudentID;
-SELECT s.Name FROM StudentData s LEFT JOIN Courses c ON s.ID = c.CourseID WHERE c.CourseID IS NULL;
-SELECT c.CourseName, s.Name FROM Courses c INNER JOIN StudentData s ON c.CourseID = s.ID;
+-- (b) Write a query to show all students with their results, even if some students don't have results, using a LEFT JOIN.
+SELECT s.Name, r.Marks
+FROM StudentData s
+LEFT JOIN Results r ON s.ID = r.StudentID;
+
+-- (c) Write a query to show all students who are not enrolled in any courses using a LEFT JOIN.
+SELECT s.Name
+FROM StudentData s
+LEFT JOIN Courses c ON s.ID = c.CourseID
+WHERE c.CourseID IS NULL;
+
+-- (d) Write a query to find all courses and the students enrolled in them using an INNER JOIN.
+SELECT c.CourseName, s.Name
+FROM Courses c
+INNER JOIN StudentData s ON c.CourseID = s.ID;
