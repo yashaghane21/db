@@ -1,0 +1,50 @@
+-- Example: Get all students from 'CS' department and all students who have an email ending with '@example.com'.
+SELECT RollNo, Name, Dept, Email
+FROM Student
+WHERE Dept = 'CS'
+
+UNION
+
+SELECT RollNo, Name, Dept, Email
+FROM Student
+WHERE Email LIKE '%@example.com';
+
+
+
+
+-- Example: Get students who are in both 'CS' department and have an email ending with '@example.com'.
+SELECT RollNo, Name, Dept, Email
+FROM Student
+WHERE Dept = 'CS'
+
+INTERSECT
+
+SELECT RollNo, Name, Dept, Email
+FROM Student
+WHERE Email LIKE '%@example.com';
+
+
+
+-- Example: Get students who are in the 'CS' department but do not have an email ending with '@example.com'.
+SELECT RollNo, Name, Dept, Email
+FROM Student
+WHERE Dept = 'CS'
+
+EXCEPT
+
+SELECT RollNo, Name, Dept, Email
+FROM Student
+WHERE Email LIKE '%@example.com';
+
+
+
+-- Example: Get all students whose names start with 'A'.
+SELECT RollNo, Name, Dept, Email
+FROM Student
+WHERE Name LIKE 'A%';
+
+
+
+-- Example: Get all students with their names in uppercase.
+SELECT UPPER(Name) AS NameUpper
+FROM Student;

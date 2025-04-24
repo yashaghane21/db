@@ -1,0 +1,19 @@
+CREATE TABLE Student (
+  RollNo INT PRIMARY KEY,
+  Name VARCHAR(50) NOT NULL,
+  Dept VARCHAR(20)
+);
+
+-- Alter Student: add Email column
+
+ALTER TABLE Student
+ADD Email VARCHAR(100);
+
+-- Alter Student: modify Dept column type (MySQL syntax)
+
+ALTER TABLE Student
+MODIFY Dept CHAR(10);
+
+-- Drop Student table if exists
+
+DROP TABLE IF EXISTS Student;

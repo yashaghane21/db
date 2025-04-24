@@ -1,0 +1,7 @@
+SELECT
+  COUNT(*)    AS TotalStudents,
+  SUM(Marks)  AS SumMarks,
+  AVG(Marks)  AS AvgMarks,
+  MAX(Marks)  AS MaxMark,
+  MIN(Marks)  AS MinMark
+FROM Results;

@@ -1,0 +1,6 @@
+SELECT Dept, COUNT(*) AS Count
+FROM Student
+WHERE Name LIKE 'R%'
+GROUP BY Dept
+HAVING COUNT(*) > 0
+ORDER BY Count DESC;

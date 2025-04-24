@@ -1,0 +1,32 @@
+-- Create view
+CREATE VIEW CS_Students AS
+SELECT RollNo, Name
+FROM Student
+WHERE Dept = 'CS';
+
+-- Query view
+
+SELECT * FROM CS_Students;
+SELECT COUNT(*) AS CS_Count FROM CS_Students;
+SELECT * FROM CS_Students WHERE RollNo = 5;
+
+-- Update via view
+
+UPDATE CS_Students
+SET Name = 'Ankita'
+WHERE RollNo = 1;
+
+-- Insert via view (adds to Student with Dept='CS')
+
+INSERT INTO CS_Students (RollNo, Name)
+VALUES (10, 'NewCSStudent');
+
+-- Delete via view (removes from Student)
+
+DELETE FROM CS_Students
+WHERE RollNo = 10;
+
+-- Drop view
+
+
+DROP VIEW IF EXISTS CS_Students;

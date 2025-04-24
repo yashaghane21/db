@@ -1,0 +1,84 @@
+-- 1. Create the departments table
+CREATE TABLE departments (
+  department_id   INT PRIMARY KEY,
+  department_name VARCHAR(100) NOT NULL
+);
+
+-- 2. Create the employees table
+CREATE TABLE employees (
+  employee_id   INT PRIMARY KEY,
+  first_name    VARCHAR(50)  NOT NULL,
+  last_name     VARCHAR(50)  NOT NULL,
+  department_id INT,
+  manager_id    INT,
+  FOREIGN KEY (department_id) REFERENCES departments(department_id),
+  FOREIGN KEY (manager_id)    REFERENCES employees(employee_id)
+);
+
+-- 3. Insert sample data into departments
+INSERT INTO departments (department_id, department_name) VALUES
+  (10, 'Finance'),
+  (20, 'HR'),
+  (30, 'Engineering'),
+  (40, 'Sales');
+
+-- 4. Insert sample data into employees
+INSERT INTO employees (employee_id, first_name, last_name, department_id, manager_id) VALUES
+  (1, 'Alice',   'Anderson',   30, NULL),   -- Top‑level manager
+  (2, 'Bob',     'Brown',      30, 1),
+  (3, 'Carol',   'Clark',      20, 1),
+  (4, 'David',   'Dawson',     10, 3),
+  (5, 'Eve',     'Edwards',    NULL, NULL); -- No department
+
+-- 5. Inner Join
+SELECT
+  e.employee_id,
+  CONCAT(e.first_name, ' ', e.last_name) AS name,
+  d.department_name
+FROM employees e
+INNER JOIN departments d
+  ON e.department_id = d.department_id;
+
+-- 6. Left Join
+SELECT
+  e.employee_id,
+  CONCAT(e.first_name, ' ', e.last_name) AS name,
+  d.department_name
+FROM employees e
+LEFT JOIN departments d
+  ON e.department_id = d.department_id;
+
+-- 7. Right Join
+SELECT
+  e.employee_id,
+  CONCAT(e.first_name, ' ', e.last_name) AS name,
+  d.department_name
+FROM employees e
+RIGHT JOIN departments d
+  ON e.department_id = d.department_id;
+
+-- 8. Full Outer Join
+SELECT
+  e.employee_id,
+  CONCAT(e.first_name, ' ', e.last_name) AS name,
+  d.department_name
+FROM employees e
+FULL OUTER JOIN departments d
+  ON e.department_id = d.department_id;
+
+-- 9. Cross Join
+SELECT
+  e.employee_id,
+  CONCAT(e.first_name, ' ', e.last_name) AS name,
+  d.department_name
+FROM employees e
+CROSS JOIN departments d;
+
+-- 10. Self Join (employee → manager)
+SELECT
+  e.employee_id,
+  CONCAT(e.first_name, ' ', e.last_name) AS employee,
+  CONCAT(m.first_name, ' ', m.last_name) AS manager
+FROM employees e
+LEFT JOIN employees m
+  ON e.manager_id = m.employee_id;

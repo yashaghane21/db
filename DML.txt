@@ -1,0 +1,13 @@
+INSERT INTO Student (RollNo, Name, Dept)
+VALUES
+  (1, 'Ank', 'CS'),
+  (2, 'Riya', 'IT');
+
+-- Update one row
+UPDATE Student
+SET Dept = 'EE'
+WHERE RollNo = 2;
+
+-- Delete one row
+DELETE FROM Student
+WHERE RollNo = 1;
